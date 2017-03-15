@@ -8,6 +8,15 @@ The main specialty of protobuf is that using the same definition
 it's quite easy to create APIs supporting both REST and gRPC protocols.
 
 
+## Versioning
+
+Versioning tries to follow Google's versioning model of APIs:
+
+- Alpha versions are highly subject of change
+- Beta versions are being tested actively
+- Stable versions are production ready (new versions are released upon BC break)
+
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
