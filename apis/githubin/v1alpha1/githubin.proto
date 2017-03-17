@@ -20,7 +20,7 @@ message BinarySearch {
 message BinaryDownload {
     enum Format {
         BINARY = 0; // No archive
-        GZIP = 1; // tar.gz
+        TARGZ = 1; // tar.gz
         ZIP = 2; // zip
     }
 
