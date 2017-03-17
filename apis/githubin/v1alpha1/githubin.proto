@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package binhq.githubin.v1alpha1;
+
+option go_package = "githubin";
+
+message BinarySearch {
+    string owner = 1;
+    string repository = 2;
+    string version = 3;
+    string os = 4;
+    string arch = 5;
+}
+
+message BinaryDownload {
+    enum DownloadType {
+        BINARY = 0;
+        GZIP = 1;
+        ZIP = 2;
+    }
+
+    string url = 1;
+    DownloadType type = 2;
+    string path = 3; // Path to the actual binary when extracting from an archive
+}
+
+service Githubin {
+    rpc DownloadBinary(BinarySearch) returns (BinaryDownload);
+}
