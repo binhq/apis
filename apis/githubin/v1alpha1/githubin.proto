@@ -4,6 +4,10 @@ package binhq.githubin.v1alpha1;
 
 option go_package = "githubin";
 
+// Search criteria for a binary download
+// First two are mandatory
+// If version is empty, aim for the latest
+// When os or arch is empty, it probably does not matter
 message BinarySearch {
     string owner = 1;
     string repository = 2;
@@ -12,18 +16,20 @@ message BinarySearch {
     string arch = 5;
 }
 
+// Binary download information
 message BinaryDownload {
-    enum DownloadType {
-        BINARY = 0;
-        GZIP = 1;
-        ZIP = 2;
+    enum Format {
+        BINARY = 0; // No archive
+        GZIP = 1; // tar.gz
+        ZIP = 2; // zip
     }
 
     string url = 1;
-    DownloadType type = 2;
+    Format format = 2; // Archive format
     string path = 3; // Path to the actual binary when extracting from an archive
 }
 
 service Githubin {
-    rpc DownloadBinary(BinarySearch) returns (BinaryDownload);
+    // Look for binary download information
+    rpc FindBinary(BinarySearch) returns (BinaryDownload);
 }
