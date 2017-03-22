@@ -1,6 +1,6 @@
 # BinHQ APIs
 
-This repository contains the contracts for public BinHQ APIs in the form of
+This repository contains the contracts for BinHQ APIs (both public and private) in the form of
 [Protocol Buffers](https://developers.google.com/protocol-buffers/) (version 3),
 which is Google's Interface Definition Language (IDL).
 
