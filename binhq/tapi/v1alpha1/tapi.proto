@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package binhq.tapi.v1alpha1;
+
+option go_package = "tapi";
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+// Parameters necessary for creating or updating a formula
+message FormulaUpdate {
+    // Identifier of the Homebrew tap.
+    // Since this is rarely seen by others than machines, UUID is appropriate.
+    string tap = 1;
+
+    // Formula details
+    Formula formula = 2;
+
+    // Formula template name or the raw template string.
+    // Note: for the time being this is not available.
+    oneof template {
+        string template_name = 3;
+        string raw_template = 4;
+    }
+}
+
+// Details of a formula
+message Formula {
+    // Name of the Formula.
+    // Used as file name and class name in the formula .rb file following the formula naming rules:
+    // https://github.com/Homebrew/brew/blob/master/docs/Formula-Cookbook.md#a-quick-word-on-naming
+    //
+    // Note: uniqueness and correctness (eg. valid Ruby class name) are not validated,
+    // it's the responsibility of the user.
+    string name = 1;
+
+    // Description
+    string description = 2;
+
+    // Homepage of the application.
+    // This field is required by Homebrew, but apart from the presence of data it is not validated (eg. formally valid URL, etc).
+    // See https://github.com/Homebrew/brew/blob/master/docs/Formula-Cookbook.md#fill-in-the-homepage
+    string homepage = 3;
+
+    // URL of the package file (eg. a Github release URL).
+    string url = 4;
+
+    // SHA256 checksum of the file.
+    string sha256 = 5;
+
+    // Version of the package (not the same as the git tag).
+    string version = 6;
+
+    // Revision
+    // See https://github.com/Homebrew/brew/blob/master/docs/Formula-Cookbook.md#formulae-revisions
+    int32 revision = 7;
+
+    // Version scheme
+    // See https://github.com/Homebrew/brew/blob/master/docs/Formula-Cookbook.md#version-scheme-changes
+    int32 version_scheme = 8;
+
+    // Formula dependencies
+    // See https://github.com/Homebrew/brew/blob/master/docs/Formula-Cookbook.md#check-for-dependencies
+    repeated string dependencies = 9;
+
+    // Conflicts with other formulae.
+    // See https://github.com/Homebrew/brew/blob/master/docs/Formula-Cookbook.md#specifying-conflicts-with-other-formulae
+    repeated string conflicts = 11;
+
+    // Installation
+    // See https://github.com/Homebrew/brew/blob/master/docs/Formula-Cookbook.md#bininstall-foo
+    repeated string install = 12;
+
+    // Caveats
+    string caveats = 13;
+
+    // Launchd plist files.
+    // See https://github.com/Homebrew/brew/blob/master/docs/Formula-Cookbook.md#launchd-plist-files
+    string plist = 14;
+}
+
+
+service Tapi {
+    rpc UpdateFormula(FormulaUpdate) returns (google.protobuf.Empty) {
+        option (google.api.http) = { put: "/v1alpha1/taps/{tap}/formulae/{formula.name}" body: "*" };
+    }
+}
