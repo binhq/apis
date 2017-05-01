@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package binhq.githubin.v1alpha1;
+package binhq.gitbin.v1alpha1;
 
-option go_package = "githubin";
+option go_package = "gitbin";
 
 // Search criteria for a binary download
 // First two are mandatory
@@ -29,7 +29,7 @@ message BinaryDownload {
     string path = 3; // Path to the actual binary when extracting from an archive
 }
 
-service Githubin {
+service Gitbin {
     // Look for binary download information
     rpc FindBinary(BinarySearch) returns (BinaryDownload);
 }
