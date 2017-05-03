@@ -17,8 +17,8 @@ message BinarySearch {
     //
     // If empty, try to find the latest version.
     oneof version {
-        string exact = 2;
-        string constraint = 3;
+        string exact_version = 2;
+        string version_constraint = 3;
     }
 
     // The name of the OS this binary is built for.
