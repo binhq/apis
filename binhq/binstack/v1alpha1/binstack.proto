@@ -4,26 +4,6 @@ package binhq.binstack.v1alpha1;
 
 option go_package = "binstack";
 
-// Complex binary version representation.
-message Version {
-    // Version of the binary.
-    //
-    // In most of the cases using this field is enough.
-    string version = 1;
-
-    // Revision of the same version.
-    //
-    // Useful when a different binary does not require a version bump.
-    //
-    // Note: the version string itself can contain the revision as well in the form of X.Y.Z-R
-    int32 revision = 2;
-
-    // Version scheme (increased when versioning scheme changes)
-    //
-    // Eg. from semantic versioning to date based versioning (1.0.0 -> 2017.05)
-    int32 scheme = 3;
-}
-
 // Search criteria for a binary.
 message BinarySearch {
     // Binary or repository name which uniquely identifies the binary.
@@ -37,7 +17,7 @@ message BinarySearch {
     //
     // If empty, try to find the latest version.
     oneof version {
-        Version exact = 2;
+        string exact = 2;
         string constraint = 3;
     }
 
@@ -64,10 +44,10 @@ message Binary {
     string homepage = 3;
 
     // Binary version.
-    Version version = 4;
+    string version = 4;
 
     // Download information.
-    DownloadInfo download = 5;
+    DownloadInfo download_info = 5;
 }
 
 // Binary download information.
