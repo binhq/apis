@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package binhq.binstack.v1alpha1;
+
+option go_package = "binstack";
+
+// Complex binary version representation.
+message Version {
+    // Version of the binary.
+    //
+    // In most of the cases using this field is enough.
+    string version = 1;
+
+    // Revision of the same version.
+    //
+    // Useful when a different binary does not require a version bump.
+    //
+    // Note: the version string itself can contain the revision as well in the form of X.Y.Z-R
+    int32 revision = 2;
+
+    // Version scheme (increased when versioning scheme changes)
+    //
+    // Eg. from semantic versioning to date based versioning (1.0.0 -> 2017.05)
+    int32 scheme = 3;
+}
+
+// Search criteria for a binary.
+message BinarySearch {
+    // Binary or repository name which uniquely identifies the binary.
+    //
+    // Examples:
+    //      - Github repo name in the form of owner/repository
+    //      - Vanity name in the provider
+    string name = 1;
+
+    // Exact version or version constraint.
+    //
+    // If empty, try to find the latest version.
+    oneof version {
+        Version exact = 2;
+        string constraint = 3;
+    }
+
+    // The name of the OS this binary is built for.
+    //
+    // eg. darwin, linux, windows, etc.
+    string os = 4;
+
+    // The arch this binary is built for.
+    //
+    // eg. i386, amd64, etc.
+    string arch = 5;
+}
+
+// Binary information.
+message Binary {
+    // Binary or repository name which uniquely identifies the binary.
+    string name = 1;
+
+    // Project description.
+    string description = 2;
+
+    // Project homepage.
+    string homepage = 3;
+
+    // Binary version.
+    Version version = 4;
+
+    // Download information.
+    DownloadInfo download = 5;
+}
+
+// Binary download information.
+message DownloadInfo {
+    // Format of the binary.
+    //
+    // For example archived or just plain binary format.
+    enum Format {
+        UNKNOWN = 0; // Unknown format (the client might still be able to unpack the binary based on other information)
+        BINARY = 1; // No archive
+        TARGZ = 2; // tar.gz
+        ZIP = 3; // zip
+    }
+
+    // URL of the binary.
+    string url = 1;
+
+    // Archive format.
+    Format format = 2;
+
+    // Path to the actual binary when extracting from an archive.
+    string path = 3;
+}
+
+// Binstack finds a binary and retrieves some information for it.
+service Binstack {
+    // Look for binary information
+    rpc FindBinary(BinarySearch) returns (Binary);
+}
